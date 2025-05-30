@@ -58,7 +58,10 @@ describe("회원가입 테스트", () => {
 
   // 회원가입 버튼 활성화 테스트
   test("이메일을 입력하고, 비밀번호와 비밀번호 확인값이 일치하면 회원가입 버튼이 활성화된다.", () => {
-    // given - 회원가입 페이지가 그려짐 -> 다른 테스트와 동일한 조건 => 테스트가 구동하기 전에 돌아갈 수 있도록 beforeEach()에 넣음
+    // given - 화면이 표시되었을 때 회원가입 버튼이 비활성화된 상태인지 검증
+    const signupButton = screen.getByRole("button", { name: "회원가입" });
+    expect(signupButton).toBeDisabled();
+
     // when - 이메일 입력, 비밀번호, 비밀번호 확인값 일치
     // then - 회원가입 버튼 활성화
   });
