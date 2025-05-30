@@ -63,6 +63,18 @@ describe("회원가입 테스트", () => {
     expect(signupButton).toBeDisabled();
 
     // when - 이메일 입력, 비밀번호, 비밀번호 확인값 일치
+    const emailInput = screen.getByLabelText("이메일");
+    const passwordInput = screen.getByLabelText("비밀번호");
+    const confirmPasswordInput = screen.getByLabelText("비밀번호 확인");
+
+    fireEvent.change(emailInput, {
+      target: { value: "button-activated@email.com" },
+    });
+    fireEvent.change(passwordInput, { target: { value: "password" } });
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: "wrong-password" },
+    });
+
     // then - 회원가입 버튼 활성화
   });
 });
