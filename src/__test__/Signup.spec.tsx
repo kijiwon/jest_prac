@@ -9,7 +9,9 @@ const queryClient = new QueryClient({
 });
 
 describe("회원가입 테스트", () => {
-  test("비밀번호와 비밀번호 확인값이 일치하지 않으면 에러메세지가 표시된다", async () => {
+  // 다른 테스트와 동일한 조건
+  // => 테스트가 구동하기 전에 돌아갈 수 있도록 beforeEach()에 넣음
+  beforeEach(() => {
     // given - 회원가입 페이지가 그려짐
     // SignupPage에서 react-router-dom과 react-query를 사용하고 있음
     // -> provider와 queryClient로 묶어줘야힘
@@ -31,7 +33,9 @@ describe("회원가입 테스트", () => {
         <RouterProvider router={router} />
       </QueryClientProvider>
     );
-
+  });
+  // 비밀번호 에러 메세지 테스트
+  test("비밀번호와 비밀번호 확인값이 일치하지 않으면 에러메세지가 표시된다", async () => {
     // when - 비밀번호와 비밀번호 확인값이 일치하지 않음
     // 각각의 input에 change event를 넣어줌
 
@@ -50,5 +54,12 @@ describe("회원가입 테스트", () => {
     // 에러메세지가 나타나기 위해 기다려야함 -> await
     const errorMessage = await screen.findByTestId("error-message");
     expect(errorMessage).toBeInTheDocument();
+  });
+
+  // 회원가입 버튼 활성화 테스트
+  test("이메일을 입력하고, 비밀번호와 비밀번호 확인값이 일치하면 회원가입 버튼이 활성화된다.", () => {
+    // given - 회원가입 페이지가 그려짐 -> 다른 테스트와 동일한 조건 => 테스트가 구동하기 전에 돌아갈 수 있도록 beforeEach()에 넣음
+    // when - 이메일 입력, 비밀번호, 비밀번호 확인값 일치
+    // then - 회원가입 버튼 활성화
   });
 });
