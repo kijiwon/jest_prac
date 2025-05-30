@@ -72,9 +72,10 @@ describe("회원가입 테스트", () => {
     });
     fireEvent.change(passwordInput, { target: { value: "password" } });
     fireEvent.change(confirmPasswordInput, {
-      target: { value: "wrong-password" },
+      target: { value: "password" },
     });
 
     // then - 회원가입 버튼 활성화
+    expect(signupButton).toBeEnabled();
   });
 });
