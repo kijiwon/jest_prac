@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import SignupPage from "../pages/SignupPage";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -33,6 +33,18 @@ describe("회원가입 테스트", () => {
     );
 
     // when - 비밀번호와 비밀번호 확인값이 일치하지 않음
+    // 각각의 input에 change event를 넣어줌
+
+    // Label태그의 text를 가져옴
+    const passwordInput = screen.getByLabelText("비밀번호");
+    const confirmPasswordInput = screen.getByLabelText("비밀번호 확인");
+
+    // change event 발생
+    fireEvent.change(passwordInput, { target: { value: "password" } });
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: "wrong-password" },
+    });
+
     // then - 에러메세지가 표시됨
   });
 });
