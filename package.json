@@ -52,12 +52,5 @@
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
   },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jest-environment-jsdom",
-    "testEnvironmentOptions": {
-      "url": "https://wanted.byeongjinkang.com"
-    }
-  },
   "packageManager": "yarn@4.0.0"
 }
