@@ -9,7 +9,7 @@ const queryClient = new QueryClient({
 });
 
 describe("회원가입 테스트", () => {
-  test("비밀번호와 비밀번호 확인값이 일치하지 않으면 에러메세지가 표시된다", () => {
+  test("비밀번호와 비밀번호 확인값이 일치하지 않으면 에러메세지가 표시된다", async () => {
     // given - 회원가입 페이지가 그려짐
     // SignupPage에서 react-router-dom과 react-query를 사용하고 있음
     // -> provider와 queryClient로 묶어줘야힘
@@ -46,5 +46,9 @@ describe("회원가입 테스트", () => {
     });
 
     // then - 에러메세지가 표시됨
+    // ErrorMessage 컴포넌트의 data-testid를 활용해 불러옴
+    // 에러메세지가 나타나기 위해 기다려야함 -> await
+    const errorMessage = await screen.findByTestId("error-message");
+    expect(errorMessage).toBeInTheDocument();
   });
 });
