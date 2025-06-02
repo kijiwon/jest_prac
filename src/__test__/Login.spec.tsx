@@ -13,9 +13,24 @@ import useLogin from "../hooks/useLogin";
 
 const queryClient = new QueryClient({
   defaultOptions: {},
+  logger: {
+    log: console.log,
+    warn: console.warn,
+    error: process.env.NODE_ENV === "test" ? () => {} : console.error,
+  },
 });
 
 describe("로그인 테스트", () => {
+  // 테스트 구동 전 console.error가 찍히면 아무것도 하지 않기
+  beforeEach(() => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  // 원상복귀
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
   test("로그인에 실패하면 에러메세지가 나타난다.", async () => {
     // given - 로그인 페이지가 그려짐
     const routes = [
@@ -42,8 +57,8 @@ describe("로그인 테스트", () => {
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     );
 
-    const emailInput = screen.getByText("이메일");
-    const passwordInput = screen.getByText("비밀번호");
+    const emailInput = screen.getByLabelText("이메일");
+    const passwordInput = screen.getByLabelText("비밀번호");
 
     // 잘못된 이메일, 비밀번호 입력
     fireEvent.change(emailInput, { target: { value: "wrong@email.com" } });
