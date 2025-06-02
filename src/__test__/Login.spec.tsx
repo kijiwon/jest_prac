@@ -1,5 +1,11 @@
 import "@testing-library/jest-dom";
-import { screen, render, renderHook, waitFor } from "@testing-library/react";
+import {
+  screen,
+  render,
+  renderHook,
+  waitFor,
+  fireEvent,
+} from "@testing-library/react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "../pages/LoginPage";
@@ -35,6 +41,17 @@ describe("로그인 테스트", () => {
     const wrapper = ({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     );
+
+    const emailInput = screen.getByText("이메일");
+    const passwordInput = screen.getByText("비밀번호");
+
+    // 잘못된 이메일, 비밀번호 입력
+    fireEvent.change(emailInput, { target: { value: "wrong@email.com" } });
+    fireEvent.change(passwordInput, { target: { value: "wrongPassword" } });
+
+    // 로그인버튼 클릭
+    const loginButton = screen.getByRole("button", { name: "로그인" });
+    fireEvent.click(loginButton);
 
     const { result } = renderHook(() => useLogin(), { wrapper });
 
