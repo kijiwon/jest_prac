@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, renderHook, waitFor } from "@testing-library/react";
+import { screen, render, renderHook, waitFor } from "@testing-library/react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "../pages/LoginPage";
@@ -31,12 +31,16 @@ describe("로그인 테스트", () => {
       </QueryClientProvider>
     );
 
+    // when  - 사용자가 로그인에 실패할 때
     const wrapper = ({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     );
 
     const { result } = renderHook(() => useLogin(), { wrapper });
 
-    await waitFor(() => expect(result.current.isError).toBe(true));
+    // then - 에러메세지가 나타남
+    await waitFor(() => result.current.isError);
+    const errorMessage = await screen.findAllByTestId("error-message");
+    expect(errorMessage).toBeInTheDocument();
   });
 });
