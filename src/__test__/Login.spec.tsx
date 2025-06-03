@@ -10,15 +10,15 @@ import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "../pages/LoginPage";
 import useLogin from "../hooks/useLogin";
+import * as nock from "nock";
 
 const queryClient = new QueryClient({
   defaultOptions: {},
-  logger: {
-    log: console.log,
-    warn: console.warn,
-    error: process.env.NODE_ENV === "test" ? () => {} : console.error,
-  },
 });
+
+const wrapper = ({ children }) => (
+  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+);
 
 describe("로그인 테스트", () => {
   // 테스트 구동 전 console.error가 찍히면 아무것도 하지 않기
@@ -53,9 +53,13 @@ describe("로그인 테스트", () => {
     );
 
     // when  - 사용자가 로그인에 실패할 때
-    const wrapper = ({ children }) => (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    );
+    // nock -> 서버로 리퀘스트 가지 않음
+    nock("https://inflearn.byeongjinkang.com")
+      .post(`/user/login`, {
+        email: "wrong@email.com",
+        password: "wrongPassword",
+      })
+      .reply(400, { msg: "SUCH_USER_DOES_NOT_EXIST" });
 
     const emailInput = screen.getByLabelText("이메일");
     const passwordInput = screen.getByLabelText("비밀번호");
